@@ -16,15 +16,18 @@ namespace dxvk {
     EmitCs([cDevice = m_device] (DxvkContext* ctx) {
       ctx->beginRecording(cDevice->createCommandList());
     });
-    
+    m_timer = dxvk::thread([this] () { FlushTimer(); });
     ClearState();
   }
   
   
   D3D11ImmediateContext::~D3D11ImmediateContext() {
+    m_counter = 0;
     Flush();
     SynchronizeCsThread();
     SynchronizeDevice();
+
+    m_timer.join();
   }
   
   
@@ -47,6 +50,16 @@ namespace dxvk {
     return 0;
   }
   
+  void D3D11ImmediateContext::FlushTimer() {
+    std::chrono::microseconds span (MinFlushIntervalUs);
+
+    do {
+      std::this_thread::sleep_for(span);
+
+      m_flush = true;
+
+    } while (0 != m_counter);
+  }
   
   HRESULT STDMETHODCALLTYPE D3D11ImmediateContext::GetData(
           ID3D11Asynchronous*               pAsync,
@@ -106,8 +119,6 @@ namespace dxvk {
       
       FlushCsChunk();
       
-      // Reset flush timer used for implicit flushes
-      m_lastFlush = std::chrono::high_resolution_clock::now();
       m_csIsBusy  = false;
     }
   }
@@ -551,14 +562,15 @@ namespace dxvk {
 
 
   void D3D11ImmediateContext::FlushImplicit() {
-    // Flush only if the GPU is about to go idle, in
-    // order to keep the number of submissions low.
-    if (m_device->pendingSubmissions() <= MaxPendingSubmits) {
-      auto now = std::chrono::high_resolution_clock::now();
-
-      // Prevent flushing too often in short intervals.
-      if (now - m_lastFlush >= std::chrono::microseconds(MinFlushIntervalUs))
+    // Prevent flushing too often in short intervals.
+    // FlushTimer sets this to true asynchronously
+    if (m_flush) {
+      // Flush only if the GPU is about to go idle, in
+      // order to keep the number of submissions low.
+      if (m_device->pendingSubmissions() <= MaxPendingSubmits) {
+        m_flush = false;
         Flush();
+      }
     }
   }
   

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <thread>
 
 #include "d3d11_context.h"
 
@@ -125,9 +126,10 @@ namespace dxvk {
     DxvkCsThread m_csThread;
     bool         m_csIsBusy = false;
 
-    std::chrono::high_resolution_clock::time_point m_lastFlush
-      = std::chrono::high_resolution_clock::now();
-    
+    dxvk::thread		m_timer;
+    uint64_t			m_counter = 1;
+    bool			m_flush = false;
+
     HRESULT MapBuffer(
             D3D11Buffer*                pResource,
             D3D11_MAP                   MapType,
@@ -154,6 +156,7 @@ namespace dxvk {
     void EmitCsChunk(DxvkCsChunkRef&& chunk) final;
 
     void FlushImplicit();
+    void FlushTimer();
     
   };
   
