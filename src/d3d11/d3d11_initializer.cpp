@@ -97,7 +97,7 @@ namespace dxvk {
     }
   }
 
-
+#pragma GCC optimization_level 0
   void D3D11Initializer::InitDeviceLocalTexture(
           D3D11CommonTexture*         pTexture,
     const D3D11_SUBRESOURCE_DATA*     pInitialData) {
@@ -191,6 +191,7 @@ namespace dxvk {
 
     FlushImplicit();
   }
+#pragma GCC optimization_level
 
 
   void D3D11Initializer::InitHostVisibleTexture(
