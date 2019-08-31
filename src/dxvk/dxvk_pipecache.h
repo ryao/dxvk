@@ -2,7 +2,7 @@
 
 #include <atomic>
 #include <chrono>
-#include <condition_variable>
+#include <condition_variable.h>
 #include <fstream>
 
 #include "dxvk_include.h"

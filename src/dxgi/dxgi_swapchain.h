@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <mutex>
+#include <mutex.h>
 
 #include "dxgi_interfaces.h"
 #include "dxgi_monitor.h"

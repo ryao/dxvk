@@ -1,6 +1,6 @@
 #pragma once
 
-#include <mutex>
+#include <mutex.h>
 
 #include "dxvk_bind_mask.h"
 #include "dxvk_constant_state.h"

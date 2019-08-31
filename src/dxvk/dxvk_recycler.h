@@ -1,6 +1,6 @@
 #pragma once
 
-#include <mutex>
+#include <mutex.h>
 #include <vector>
 
 namespace dxvk {

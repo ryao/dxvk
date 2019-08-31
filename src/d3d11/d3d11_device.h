@@ -1,6 +1,6 @@
 #pragma once
 
-#include <mutex>
+#include <mutex.h>
 #include <vector>
 
 #include "../dxbc/dxbc_options.h"

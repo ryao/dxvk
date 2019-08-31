@@ -3,7 +3,7 @@
 #include <array>
 #include <fstream>
 #include <iostream>
-#include <mutex>
+#include <mutex.h>
 #include <string>
 
 namespace dxvk {

@@ -1,0 +1,9 @@
+#ifndef DXVK_MINGW_PRIVATE_H_
+#define DXVK_MINGW_PRIVATE_H_
+
+/* Disable debug code */
+#ifndef STDMUTEX_RECURSION_CHECKS
+#define STDMUTEX_RECURSION_CHECKS 0
+#endif /* STDMUTEX_RECURSION_CHECKS */
+
+#endif /* DXVK_MINGW_PRIVATE_H_ */
